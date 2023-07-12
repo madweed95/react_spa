@@ -11,7 +11,7 @@ import { useStorage } from "../hooks";
 import { useNavigate } from "react-router-dom";
 
 export default function LeaderBoard() {
-  const { allTeams, isLoadingAllTeams } = useStorage();
+  const { allTeams, isLoadingAllTeams, setpickedName } = useStorage();
   const navigate = useNavigate();
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -50,7 +50,10 @@ export default function LeaderBoard() {
           {!isLoadingAllTeams &&
             allTeams.map((team) => (
               <StyledTableRow
-                onClick={() => navigate(`/${team.team}`)}
+                onClick={() => {
+                  navigate(`/${team.team}`);
+                  setpickedName(team.team);
+                }}
                 key={team.order}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >

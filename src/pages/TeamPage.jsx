@@ -1,7 +1,8 @@
 import React from "react";
+import TeamPageComponent from "../components/TeamPageComponent";
 
-function AboutPage() {
-  return <div>About page</div>;
+function TeamPage() {
+  return <TeamPageComponent />;
 }
 
-export default AboutPage;
+export default TeamPage;

@@ -6,11 +6,15 @@ export const StateStorage = createContext();
 export const StateStorageProvider = ({ children }) => {
   const [allTeams, setAllTeams] = useState({});
   const [isLoadingAllTeams, setIsLoadingAllTeams] = useState(true);
+  const [pickedName, setpickedName] = useState("");
+
   const storage = {
     allTeams,
     setAllTeams,
     isLoadingAllTeams,
     setIsLoadingAllTeams,
+    pickedName,
+    setpickedName,
   };
 
   return (

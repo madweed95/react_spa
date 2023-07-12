@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import HomePageComponent from "../components/HomePageComponent";
 
-function HomePage(allTeams, isLoading) {
+function HomePage() {
   return (
     <>
       <header>
@@ -14,7 +14,7 @@ function HomePage(allTeams, isLoading) {
           </ul>
         </nav>
       </header>
-      <HomePageComponent allTeams={allTeams} isLoading={isLoading} />
+      <HomePageComponent />
     </>
   );
 }

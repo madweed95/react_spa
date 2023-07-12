@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
@@ -8,16 +8,45 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import LeaderBoard from "./LeaderBoard";
-import "./HomePageComponent.css";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import axios from "axios";
+import { useStorage } from "../hooks";
+
+//let r = (Math.random() + 1).toString(36).substring(7);
+//console.log("random", r);
 
 export default function HomePageComponent() {
+  const queryClient = useQueryClient();
+  const { setAllTeams, setIsLoadingAllTeams } = useStorage();
+
+  const { mutate: createNewTeam } = useMutation((payload) =>
+    axios.post("https://klikuj.herokuapp.com/api/v1/klik", payload)
+  );
+
+  useQuery(
+    ["get_all_teams"],
+    () => axios.get("https://klikuj.herokuapp.com/api/v1/leaderboard"),
+    {
+      select: (res) => res.data,
+      onSuccess: (data) => {
+        setIsLoadingAllTeams(false);
+        setAllTeams(data);
+      },
+      onError: (error) => console.log("Something went worng, " + error),
+    }
+  );
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+      name: data.get("name"),
     });
+    createNewTeam({
+      team: "azim",
+      session: "azim1",
+    });
+    queryClient.invalidateQueries({ queryKey: ["get_all_teams"] });
   };
   const defaultTheme = createTheme();
   return (
@@ -47,10 +76,10 @@ export default function HomePageComponent() {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  name="firstName"
+                  name="name"
                   required
                   fullWidth
-                  id="firstName"
+                  id="name"
                   label="Name"
                   autoFocus
                 />
