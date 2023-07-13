@@ -8,10 +8,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import LeaderBoard from "./LeaderBoard";
-import { useMutation } from "react-query";
-import axios from "axios";
 import useInvalidateQuery from "../hooks/useInvalidateQuery";
-import { useGenerateString, useStorage } from "../hooks";
+import { useGenerateString, usePostNewTeam, useStorage } from "../hooks";
 import { useNavigate } from "react-router-dom";
 
 // TODO: doesnt change total clicks after first clikc
@@ -19,12 +17,10 @@ import { useNavigate } from "react-router-dom";
 export default function HomePageComponent() {
   const navigate = useNavigate();
   const { invalidateQueries } = useInvalidateQuery();
-  const { setGeneratedStringNewTeam, setpickedName, setMyClicks } =
+  const { setGeneratedStringNewTeam, setpickedName, setMyClicks, pickedName } =
     useStorage();
   const { string } = useGenerateString();
-  const { mutate: createNewTeam } = useMutation((payload) =>
-    axios.post("https://klikuj.herokuapp.com/api/v1/klik", payload)
-  );
+  const { submit } = usePostNewTeam();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -32,7 +28,7 @@ export default function HomePageComponent() {
 
     setGeneratedStringNewTeam(string);
     setpickedName(data.get("name"));
-    createNewTeam(
+    submit(
       {
         team: data.get("name"),
         session: string,
@@ -41,13 +37,13 @@ export default function HomePageComponent() {
         onSuccess: (data) => {
           setMyClicks(data.data.your_clicks);
           invalidateQueries("get_all_teams");
+          navigate(`/${pickedName}`);
         },
         onError: (err) => {
           console.log("danger", "Error in creating event", err);
         },
       }
     );
-    navigate(`/${data.get("name")}`);
   };
   const defaultTheme = createTheme();
 

@@ -36,7 +36,7 @@ export default function TeamBoard() {
   }));
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{ maxHeight: 300 }}>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>

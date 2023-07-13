@@ -53,7 +53,14 @@ export default function TeamPageComponent() {
   const defaultTheme = createTheme();
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Button variant="outlined" onClick={() => navigate(-1)}>
+      <Button
+        variant="outlined"
+        onClick={() => {
+          navigate(-1);
+          setMyClicks(0);
+        }}
+        sx={{ mt: 3 }}
+      >
         Back
       </Button>
       <Container component="main" maxWidth="xs">

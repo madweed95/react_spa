@@ -39,7 +39,7 @@ export default function LeaderBoard() {
   }));
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{ maxHeight: 440 }}>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
