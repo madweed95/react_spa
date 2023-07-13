@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { api_url } from "../components/constants/api_url";
+import { api_url } from "../constants/api_url";
 
 const useGetAllTeams = () => {
   const [allTeams, setAllTeams] = useState([{}]);

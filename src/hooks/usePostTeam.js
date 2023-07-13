@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useMutation } from "react-query";
-import { api_url } from "../components/constants/api_url";
+import { api_url } from "../constants/api_url";
 
 const usePostTeam = () => {
   const { mutate: submit } = useMutation((payload) =>
