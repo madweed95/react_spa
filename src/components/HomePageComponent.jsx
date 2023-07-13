@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
@@ -8,47 +8,49 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import LeaderBoard from "./LeaderBoard";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 import axios from "axios";
-import { useStorage } from "../hooks";
+import useInvalidateQuery from "../hooks/useInvalidateQuery";
+import { useGenerateString, useStorage } from "../hooks";
+import { useNavigate } from "react-router-dom";
 
-//let r = (Math.random() + 1).toString(36).substring(7);
-//console.log("random", r);
+// TODO: doesnt change total clicks after first clikc
 
 export default function HomePageComponent() {
-  const queryClient = useQueryClient();
-  const { setAllTeams, setIsLoadingAllTeams } = useStorage();
-
+  const navigate = useNavigate();
+  const { invalidateQueries } = useInvalidateQuery();
+  const { setGeneratedStringNewTeam, setpickedName, setMyClicks } =
+    useStorage();
+  const { string } = useGenerateString();
   const { mutate: createNewTeam } = useMutation((payload) =>
     axios.post("https://klikuj.herokuapp.com/api/v1/klik", payload)
-  );
-
-  useQuery(
-    ["get_all_teams"],
-    () => axios.get("https://klikuj.herokuapp.com/api/v1/leaderboard"),
-    {
-      select: (res) => res.data,
-      onSuccess: (data) => {
-        setIsLoadingAllTeams(false);
-        setAllTeams(data);
-      },
-      onError: (error) => console.log("Something went worng, " + error),
-    }
   );
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get("name"),
-    });
-    createNewTeam({
-      team: "azim",
-      session: "azim1",
-    });
-    queryClient.invalidateQueries({ queryKey: ["get_all_teams"] });
+
+    setGeneratedStringNewTeam(string);
+    setpickedName(data.get("name"));
+    createNewTeam(
+      {
+        team: data.get("name"),
+        session: string,
+      },
+      {
+        onSuccess: (data) => {
+          setMyClicks(data.data.your_clicks);
+          invalidateQueries("get_all_teams");
+        },
+        onError: (err) => {
+          console.log("danger", "Error in creating event", err);
+        },
+      }
+    );
+    navigate(`/${data.get("name")}`);
   };
   const defaultTheme = createTheme();
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">

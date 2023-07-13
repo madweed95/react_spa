@@ -1,22 +1,21 @@
-import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import TeamPage from "./pages/TeamPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import axios from "axios";
-import { useQuery } from "react-query";
 import "./App.css";
-import { useStorage } from "./hooks";
 
 function App() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate("/");
+  }, []);
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/:name" element={<TeamPage />} />
-        <Route path="/*" element={<NotFoundPage />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/:name" element={<TeamPage />} />
+      <Route path="/*" element={<NotFoundPage />} />
+    </Routes>
   );
 }
 

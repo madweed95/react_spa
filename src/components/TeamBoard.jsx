@@ -7,13 +7,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { useGetAllTeams, useStorage } from "../hooks";
-import { useNavigate } from "react-router-dom";
+import { useGetAllTeams } from "../hooks";
 
-export default function LeaderBoard() {
-  const { setpickedName } = useStorage();
+export default function TeamBoard() {
   const { allTeams, isLoadingTeams } = useGetAllTeams();
-  const navigate = useNavigate();
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -52,10 +49,6 @@ export default function LeaderBoard() {
             allTeams.map((team, i) => (
               <StyledTableRow
                 key={i}
-                onClick={() => {
-                  navigate(`/${team.team}`);
-                  setpickedName(team.team);
-                }}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <StyledTableCell component="th" scope="row">
