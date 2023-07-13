@@ -53,9 +53,9 @@ export default function HomePageComponent() {
   const defaultTheme = createTheme();
 
   useEffect(() => {
-    if (pickedName) {
-      const found = allTeams.some(
-        (el) => el.team.toLowerCase() === pickedName.toLowerCase()
+    if (pickedName && allTeams) {
+      const found = allTeams.some((el) =>
+        el.team ? el.team.toLowerCase() === pickedName.toLowerCase() : ""
       );
       if (!found) setValid(false);
       else {

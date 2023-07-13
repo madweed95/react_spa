@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 export default function TeamPageComponent() {
   const { generatedStringNewTeam, myClicks, setMyClicks } = useStorage();
 
-  const { pickedName } = useStorage();
+  const { pickedName, setpickedName } = useStorage();
   const { allTeams, isLoadingTeams } = useGetAllTeams();
   const { allClicks } = useDefineTeam(allTeams, pickedName, isLoadingTeams);
   const { ranString } = useGenerateString();
@@ -54,6 +54,7 @@ export default function TeamPageComponent() {
         onClick={() => {
           navigate(-1);
           setMyClicks(0);
+          setpickedName("");
         }}
         sx={{ mt: 3 }}
       >
