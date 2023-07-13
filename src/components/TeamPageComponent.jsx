@@ -10,7 +10,7 @@ import {
   useDefineTeam,
   useGenerateString,
   useGetAllTeams,
-  usePostNewTeam,
+  usePostTeam,
   useStorage,
 } from "../hooks";
 import TeamBoard from "./TeamBoard";
@@ -23,17 +23,17 @@ export default function TeamPageComponent() {
   const { pickedName } = useStorage();
   const { allTeams, isLoadingTeams } = useGetAllTeams();
   const { allClicks } = useDefineTeam(allTeams, pickedName, isLoadingTeams);
-  const { string } = useGenerateString();
+  const { ranString } = useGenerateString();
   const { invalidateQueries } = useInvalidateQuery();
   const navigate = useNavigate();
-  const { submit } = usePostNewTeam();
+  const { submit } = usePostTeam();
 
   const handleClick = (event) => {
     event.preventDefault();
     submit(
       {
         team: pickedName,
-        session: generatedStringNewTeam ? generatedStringNewTeam : string,
+        session: generatedStringNewTeam ? generatedStringNewTeam : ranString,
       },
       {
         onSuccess: (data) => {
@@ -41,7 +41,7 @@ export default function TeamPageComponent() {
           invalidateQueries("get_all_teams");
         },
         onError: (err) => {
-          console.log("danger", "Error in creating event", err);
+          console.log("Something went wrong | click for team", err);
         },
       }
     );

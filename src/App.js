@@ -7,9 +7,11 @@ import "./App.css";
 
 function App() {
   const navigate = useNavigate();
+
   useEffect(() => {
     navigate("/");
   }, []);
+
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
