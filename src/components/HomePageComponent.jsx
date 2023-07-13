@@ -8,18 +8,43 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import LeaderBoard from "./LeaderBoard";
-import "./HomePageComponent.css";
+import useInvalidateQuery from "../hooks/useInvalidateQuery";
+import { useGenerateString, usePostNewTeam, useStorage } from "../hooks";
+import { useNavigate } from "react-router-dom";
 
 export default function HomePageComponent() {
+  const navigate = useNavigate();
+  const { invalidateQueries } = useInvalidateQuery();
+  const { setGeneratedStringNewTeam, setpickedName, setMyClicks, pickedName } =
+    useStorage();
+  const { string } = useGenerateString();
+  const { submit } = usePostNewTeam();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+
+    setGeneratedStringNewTeam(string);
+    setpickedName(data.get("name"));
+    submit(
+      {
+        team: data.get("name"),
+        session: string,
+      },
+      {
+        onSuccess: (data) => {
+          setMyClicks(data.data.your_clicks);
+          invalidateQueries("get_all_teams");
+          navigate(`/${pickedName}`);
+        },
+        onError: (err) => {
+          console.log("danger", "Error in creating event", err);
+        },
+      }
+    );
   };
   const defaultTheme = createTheme();
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -47,10 +72,10 @@ export default function HomePageComponent() {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  name="firstName"
+                  name="name"
                   required
                   fullWidth
-                  id="firstName"
+                  id="name"
                   label="Name"
                   autoFocus
                 />
