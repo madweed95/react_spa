@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
@@ -9,23 +9,29 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import LeaderBoard from "./LeaderBoard";
 import useInvalidateQuery from "../hooks/useInvalidateQuery";
-import { useGenerateString, usePostTeam, useStorage } from "../hooks";
+import {
+  useGenerateString,
+  useGetAllTeams,
+  usePostTeam,
+  useStorage,
+} from "../hooks";
 import { useNavigate } from "react-router-dom";
 
 export default function HomePageComponent() {
+  const [valid, setValid] = useState();
   const navigate = useNavigate();
   const { invalidateQueries } = useInvalidateQuery();
   const { setGeneratedStringNewTeam, setpickedName, setMyClicks, pickedName } =
     useStorage();
   const { ranString } = useGenerateString();
+  const { allTeams } = useGetAllTeams();
   const { submit } = usePostTeam();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
     setGeneratedStringNewTeam(ranString);
-    setpickedName(data.get("name"));
+
     submit(
       {
         team: data.get("name"),
@@ -45,6 +51,18 @@ export default function HomePageComponent() {
   };
 
   const defaultTheme = createTheme();
+
+  useEffect(() => {
+    if (pickedName) {
+      const found = allTeams.some(
+        (el) => el.team.toLowerCase() === pickedName.toLowerCase()
+      );
+      if (!found) setValid(false);
+      else {
+        setValid(true);
+      }
+    }
+  }, [pickedName, allTeams]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -79,6 +97,13 @@ export default function HomePageComponent() {
                   id="name"
                   label="Name"
                   autoFocus
+                  placeholder="Type name to start"
+                  onChange={(e) => {
+                    e.preventDefault();
+                    setpickedName(e.currentTarget.value);
+                  }}
+                  error={valid}
+                  helperText={valid ? "Team already exist" : ""}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -87,6 +112,7 @@ export default function HomePageComponent() {
                   fullWidth
                   variant="contained"
                   sx={{ height: "100%" }}
+                  disabled={!pickedName || valid}
                 >
                   Click
                 </Button>
