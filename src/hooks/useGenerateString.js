@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 
 const useGenerateString = () => {
-  const [string, setString] = useState("");
-  let ranString = (Math.random() + 1).toString(36).substring(7);
+  const [ranString, setRanString] = useState("");
+
   useEffect(() => {
-    setString(ranString);
+    setRanString((Math.random() + 1).toString(36).substring(7));
   }, []);
 
-  return { string };
+  return { ranString };
 };
 
 export default useGenerateString;

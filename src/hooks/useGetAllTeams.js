@@ -1,18 +1,20 @@
 import axios from "axios";
 import { useState } from "react";
 import { useQuery } from "react-query";
+import { api_url } from "../components/constants/api_url";
 
 const useGetAllTeams = () => {
   const [allTeams, setAllTeams] = useState([{}]);
   const { isLoading: isLoadingTeams } = useQuery(
     ["get_all_teams"],
-    () => axios.get("https://klikuj.herokuapp.com/api/v1/leaderboard"),
+    () => axios.get(`${api_url}leaderboard`),
     {
       select: (res) => res.data,
       onSuccess: (data) => {
         setAllTeams(data);
       },
-      onError: (error) => console.log("Something went worng, " + error),
+      onError: (error) =>
+        console.log("Something went worng | get all teams ", error),
     }
   );
 

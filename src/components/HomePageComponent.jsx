@@ -9,7 +9,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import LeaderBoard from "./LeaderBoard";
 import useInvalidateQuery from "../hooks/useInvalidateQuery";
-import { useGenerateString, usePostNewTeam, useStorage } from "../hooks";
+import { useGenerateString, usePostTeam, useStorage } from "../hooks";
 import { useNavigate } from "react-router-dom";
 
 export default function HomePageComponent() {
@@ -17,19 +17,19 @@ export default function HomePageComponent() {
   const { invalidateQueries } = useInvalidateQuery();
   const { setGeneratedStringNewTeam, setpickedName, setMyClicks, pickedName } =
     useStorage();
-  const { string } = useGenerateString();
-  const { submit } = usePostNewTeam();
+  const { ranString } = useGenerateString();
+  const { submit } = usePostTeam();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    setGeneratedStringNewTeam(string);
+    setGeneratedStringNewTeam(ranString);
     setpickedName(data.get("name"));
     submit(
       {
         team: data.get("name"),
-        session: string,
+        session: ranString,
       },
       {
         onSuccess: (data) => {
@@ -38,11 +38,12 @@ export default function HomePageComponent() {
           navigate(`/${pickedName}`);
         },
         onError: (err) => {
-          console.log("danger", "Error in creating event", err);
+          console.log("Something went wrong | create new team", err);
         },
       }
     );
   };
+
   const defaultTheme = createTheme();
 
   return (
