@@ -12,8 +12,6 @@ import useInvalidateQuery from "../hooks/useInvalidateQuery";
 import { useGenerateString, usePostNewTeam, useStorage } from "../hooks";
 import { useNavigate } from "react-router-dom";
 
-// TODO: doesnt change total clicks after first clikc
-
 export default function HomePageComponent() {
   const navigate = useNavigate();
   const { invalidateQueries } = useInvalidateQuery();

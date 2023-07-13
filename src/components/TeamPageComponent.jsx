@@ -6,12 +6,11 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useMutation } from "react-query";
-import axios from "axios";
 import {
   useDefineTeam,
   useGenerateString,
   useGetAllTeams,
+  usePostNewTeam,
   useStorage,
 } from "../hooks";
 import TeamBoard from "./TeamBoard";
@@ -27,14 +26,11 @@ export default function TeamPageComponent() {
   const { string } = useGenerateString();
   const { invalidateQueries } = useInvalidateQuery();
   const navigate = useNavigate();
-
-  const { mutate: click } = useMutation((payload) =>
-    axios.post("https://klikuj.herokuapp.com/api/v1/klik", payload)
-  );
+  const { submit } = usePostNewTeam();
 
   const handleClick = (event) => {
     event.preventDefault();
-    click(
+    submit(
       {
         team: pickedName,
         session: generatedStringNewTeam ? generatedStringNewTeam : string,
