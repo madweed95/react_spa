@@ -27,10 +27,6 @@ export default function TeamBoard() {
     "&:nth-of-type(odd)": {
       backgroundColor: "#F3F4F6",
     },
-
-    "&:nth-of-type": {
-      backgroundColor: "red",
-    },
   }));
 
   return (
