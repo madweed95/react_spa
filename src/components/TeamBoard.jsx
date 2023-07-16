@@ -12,7 +12,7 @@ import { SkeletonRow } from "./Skeleton";
 
 export default function TeamBoard() {
   const { pickedName } = useStorage();
-  const { allTeams, isLoadingTeams } = useGetAllTeams();
+  const { teams, isLoadingTeams } = useGetAllTeams();
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -40,13 +40,10 @@ export default function TeamBoard() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {isLoadingTeams ||
-          (allTeams &&
-            allTeams.length === 1 &&
-            allTeams[0].team === undefined) ? (
+          {isLoadingTeams ? (
             <SkeletonRow />
           ) : (
-            allTeams.map((team, i) => (
+            teams.map((team, i) => (
               <StyledTableRow key={i}>
                 <StyledTableCell
                   component="th"

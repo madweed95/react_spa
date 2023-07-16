@@ -21,8 +21,8 @@ export default function TeamPageComponent() {
   const { generatedStringNewTeam, myClicks, setMyClicks } = useStorage();
 
   const { pickedName, setpickedName } = useStorage();
-  const { allTeams, isLoadingTeams } = useGetAllTeams();
-  const { allClicks } = useDefineTeam(allTeams, pickedName, isLoadingTeams);
+  const { teams, isLoadingTeams } = useGetAllTeams();
+  const { allClicks } = useDefineTeam(teams, pickedName, isLoadingTeams);
   const { ranString } = useGenerateString();
   const { invalidateQueries } = useInvalidateQuery();
   const navigate = useNavigate();

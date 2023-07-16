@@ -36,8 +36,9 @@ export const StyledTableRow = styled(TableRow)(() => ({
 
 export default function LeaderBoard() {
   const { setpickedName } = useStorage();
-  const { allTeams, isLoadingTeams } = useGetAllTeams();
+  const { teams, isLoadingTeams } = useGetAllTeams();
   const navigate = useNavigate();
+
   return (
     <TableContainer component={Paper} sx={{ maxHeight: 440 }}>
       <Table aria-label="simple table">
@@ -48,15 +49,12 @@ export default function LeaderBoard() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {isLoadingTeams ||
-          (allTeams &&
-            allTeams.length === 1 &&
-            allTeams[0].team === undefined) ? (
+          {isLoadingTeams ? (
             <SkeletonRow />
-          ) : allTeams.length === 0 ? (
+          ) : teams.length === 0 ? (
             <NoTeams />
           ) : (
-            allTeams.map((team, i) => (
+            teams.map((team, i) => (
               <StyledTableRow
                 key={i}
                 onClick={() => {

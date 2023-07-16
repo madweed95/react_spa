@@ -24,7 +24,7 @@ export default function HomePageComponent() {
   const { setGeneratedStringNewTeam, setpickedName, setMyClicks, pickedName } =
     useStorage();
   const { ranString } = useGenerateString();
-  const { allTeams } = useGetAllTeams();
+  const { teams } = useGetAllTeams();
   const { submit } = usePostTeam();
 
   const handleSubmit = (event) => {
@@ -53,8 +53,8 @@ export default function HomePageComponent() {
   const defaultTheme = createTheme();
 
   useEffect(() => {
-    if (pickedName && allTeams) {
-      const found = allTeams.some((el) =>
+    if (pickedName && teams) {
+      const found = teams.some((el) =>
         el.team ? el.team.toLowerCase() === pickedName.toLowerCase() : ""
       );
       if (!found) setValid(false);
@@ -62,7 +62,7 @@ export default function HomePageComponent() {
         setValid(true);
       }
     }
-  }, [pickedName, allTeams]);
+  }, [pickedName, teams]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
