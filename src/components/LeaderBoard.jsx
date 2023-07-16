@@ -61,7 +61,13 @@ export default function LeaderBoard() {
                   navigate(`/${team.team}`);
                   setpickedName(team.team);
                 }}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                sx={{
+                  "&:last-child td, &:last-child th": { border: 0 },
+                  ":hover": {
+                    bgcolor: "white",
+                    cursor: "pointer",
+                  },
+                }}
               >
                 <StyledTableCell component="th" scope="row">
                   {`${team.order}. ${team.team}`}
