@@ -9,6 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useGetAllTeams, useStorage } from "../hooks";
 import { useNavigate } from "react-router-dom";
+import { Skeleton } from "@mui/material";
 
 export default function LeaderBoard() {
   const { setpickedName } = useStorage();
@@ -48,7 +49,29 @@ export default function LeaderBoard() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {!isLoadingTeams &&
+          {isLoadingTeams ? (
+            <StyledTableRow
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <StyledTableCell component="th" scope="row">
+                <Skeleton animation="wave" />
+              </StyledTableCell>
+              <StyledTableCell align="right">
+                <Skeleton animation="wave" />
+              </StyledTableCell>
+            </StyledTableRow>
+          ) : allTeams.length === 0 ? (
+            <StyledTableRow
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <StyledTableCell component="th" scope="row">
+                No teams yet
+              </StyledTableCell>
+              <StyledTableCell align="right">
+                Please, create one
+              </StyledTableCell>
+            </StyledTableRow>
+          ) : (
             allTeams.map((team, i) => (
               <StyledTableRow
                 key={i}
@@ -63,7 +86,8 @@ export default function LeaderBoard() {
                 </StyledTableCell>
                 <StyledTableCell align="right">{team.clicks}</StyledTableCell>
               </StyledTableRow>
-            ))}
+            ))
+          )}
         </TableBody>
       </Table>
     </TableContainer>
