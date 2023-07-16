@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useGetAllTeams, useStorage } from "../hooks";
-import { Skeleton } from "@mui/material";
+import { SkeletonRow } from "./Skeleton";
 
 export default function TeamBoard() {
   const { pickedName } = useStorage();
@@ -40,17 +40,11 @@ export default function TeamBoard() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {isLoadingTeams ? (
-            <StyledTableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <StyledTableCell component="th" scope="row">
-                <Skeleton animation="wave" />
-              </StyledTableCell>
-              <StyledTableCell align="right">
-                <Skeleton animation="wave" />
-              </StyledTableCell>
-            </StyledTableRow>
+          {isLoadingTeams ||
+          (allTeams &&
+            allTeams.length === 1 &&
+            allTeams[0].team === undefined) ? (
+            <SkeletonRow />
           ) : (
             allTeams.map((team, i) => (
               <StyledTableRow key={i}>
